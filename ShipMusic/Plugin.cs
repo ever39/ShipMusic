@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 namespace ShipMusic
 {
     [BepInPlugin(GUID,NAME,VERSION)]
+    [BepInDependency("LCSoundTool", BepInDependency.DependencyFlags.HardDependency)]
     public class Plugin : BaseUnityPlugin
     {
         public const string GUID = "command.ShipMusic";
@@ -17,6 +18,7 @@ namespace ShipMusic
         public static AudioClip selectedClip;
         public static ConfigEntry<float> musicVolume;
         public static ConfigEntry<float> maxMusicDistance;
+        public static ConfigEntry<bool> enableFilter;
         public static ManualLogSource mls { get; private set; }
         private readonly Harmony har = new Harmony(GUID);
 
@@ -25,6 +27,7 @@ namespace ShipMusic
             mls = Logger;
             musicVolume = Config.Bind("General", "Volume", 2f, "be glad that i added this");
             maxMusicDistance = Config.Bind("General", "MaxDistance", 25f, "max distance of the sound");
+            enableFilter = Config.Bind("General", "Enable Speaker Filter?", false, "Should the mod enable the radio filter?");
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 

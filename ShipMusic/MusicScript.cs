@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace ShipMusic
 {
@@ -14,6 +15,7 @@ namespace ShipMusic
         public static GameObject musicObj;
         private static AudioClip musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.mp3");
         public static AudioSource shipMusicSource;
+        //public static AudioMixer coolMixer;
 
         private void Update()
         {
@@ -22,7 +24,18 @@ namespace ShipMusic
                 if (hangarShip == null)
                 {
                     hangarShip = GameObject.Find("/Environment/HangarShip/");
-                    musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.mp3");
+                    if(musicClip == null)
+                    {
+                        musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.mp3");
+                    }
+                    if (musicClip == null)
+                    {
+                        musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.ogg");
+                    }
+                    if (musicClip == null)
+                    {
+                        musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.wav");
+                    }
 
                     if (hangarShip != null)
                     {
@@ -34,6 +47,16 @@ namespace ShipMusic
                         musicObj.AddComponent<AudioSource>();
 
                         shipMusicSource = musicObj.GetComponent<AudioSource>();
+
+                        if (Plugin.enableFilter.Value)
+                        {
+                            musicObj.AddComponent<AudioHighPassFilter>();
+                            musicObj.AddComponent<AudioDistortionFilter>();
+                            musicObj.AddComponent<AudioLowPassFilter>();
+                            musicObj.GetComponent<AudioHighPassFilter>().cutoffFrequency = 4000;
+                            musicObj.GetComponent<AudioDistortionFilter>().distortionLevel = 0.94f;
+                            musicObj.GetComponent<AudioLowPassFilter>().cutoffFrequency = 2064;
+                        }
 
                         shipMusicSource.dopplerLevel = 0;
                         shipMusicSource.spatialBlend = 1;
