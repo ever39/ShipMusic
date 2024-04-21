@@ -13,7 +13,7 @@ namespace ShipMusic
     {
         public static GameObject hangarShip;
         public static GameObject musicObj;
-        private static AudioClip musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.mp3");
+        private static AudioClip musicClip;
         public static AudioSource shipMusicSource;
         //public static AudioMixer coolMixer;
 
@@ -24,19 +24,34 @@ namespace ShipMusic
                 if (hangarShip == null)
                 {
                     hangarShip = GameObject.Find("/Environment/HangarShip/");
-                    if(musicClip == null)
-                    {
-                        musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.mp3");
-                    }
                     if (musicClip == null)
                     {
-                        musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.ogg");
+                        try
+                        {
+                            Plugin.mls.LogWarning("oops! no file?");
+                            musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.wav");
+                        }
+                        catch (Exception)
+                        {
+                            try
+                            {
+                                Plugin.mls.LogWarning("oops! no wav, trying ogg!");
+                                musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.ogg");
+                            }
+                            catch (Exception)
+                            {
+                                try
+                                {
+                                    Plugin.mls.LogWarning("oops! no wav, no ogg, trying mp3!");
+                                    musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.mp3");
+                                }
+                                catch (Exception)
+                                {
+                                    Plugin.mls.LogError("Help. There's no files.");
+                                }
+                            }
+                        }
                     }
-                    if (musicClip == null)
-                    {
-                        musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.wav");
-                    }
-
                     if (hangarShip != null)
                     {
                         musicObj = new GameObject("ShipMusicSource");
@@ -77,18 +92,5 @@ namespace ShipMusic
                 Plugin.mls.LogError($"found exception: {e}");
             }
         }
-
-        /*private void LateUpdate()
-        {
-            if(hangarShip == null | shipMusicSource.clip == null)
-            {
-                hangarShip = GameObject.Find("/Environment/HangarShip/");
-                shipMusicSource.clip = musicClip;
-            }
-            if(hangarShip != null && shipMusicSource.clip != null)
-            {
-                shipMusicSource.Play();
-            }
-        }*/
     }
 }
