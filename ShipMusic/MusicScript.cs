@@ -15,7 +15,6 @@ namespace ShipMusic
         public static GameObject musicObj;
         private static AudioClip musicClip;
         public static AudioSource shipMusicSource;
-        //public static AudioMixer coolMixer;
 
         private void Update()
         {
@@ -52,38 +51,40 @@ namespace ShipMusic
                             }
                         }
                     }
-                    if (hangarShip != null)
+                    if (hangarShip != null && musicObj == null)
                     {
-                        musicObj = new GameObject("ShipMusicSource");
-                        musicObj.transform.SetParent(hangarShip.transform, false);
-                        musicObj.transform.rotation = Quaternion.identity;
-                        musicObj.transform.localScale = Vector3.one;
-                        musicObj.transform.localPosition = new Vector3(2.2f, 0.5f, -6.7f);
-                        musicObj.AddComponent<AudioSource>();
+                            musicObj = new GameObject("ShipMusicSource");
+                            musicObj.transform.SetParent(hangarShip.transform, false);
+                            musicObj.transform.rotation = Quaternion.identity;
+                            musicObj.transform.localScale = Vector3.one;
+                            musicObj.transform.localPosition = new Vector3(2.2f, 0.5f, -6.7f);
+                            musicObj.AddComponent<AudioSource>();
 
-                        shipMusicSource = musicObj.GetComponent<AudioSource>();
+                            shipMusicSource = musicObj.GetComponent<AudioSource>();
 
-                        if (Plugin.enableFilter.Value)
-                        {
-                            musicObj.AddComponent<AudioHighPassFilter>();
-                            musicObj.AddComponent<AudioDistortionFilter>();
-                            musicObj.AddComponent<AudioLowPassFilter>();
-                            musicObj.GetComponent<AudioHighPassFilter>().cutoffFrequency = 4000;
-                            musicObj.GetComponent<AudioDistortionFilter>().distortionLevel = 0.94f;
-                            musicObj.GetComponent<AudioLowPassFilter>().cutoffFrequency = 2064;
-                        }
+                            if (Plugin.enableFilter.Value)
+                            {
+                                Plugin.mls.LogInfo("filter config is true! adding filters...");
+                                musicObj.AddComponent<AudioHighPassFilter>();
+                                musicObj.AddComponent<AudioDistortionFilter>();
+                                musicObj.AddComponent<AudioLowPassFilter>();
+                                musicObj.GetComponent<AudioHighPassFilter>().cutoffFrequency = 4150;
+                                musicObj.GetComponent<AudioDistortionFilter>().distortionLevel = 0.92f;
+                                musicObj.GetComponent<AudioLowPassFilter>().cutoffFrequency = 3064;
+                            }
 
-                        shipMusicSource.dopplerLevel = 0;
-                        shipMusicSource.spatialBlend = 1;
-                        shipMusicSource.volume = Plugin.musicVolume.Value;
-                        shipMusicSource.loop = true;
-                        shipMusicSource.priority = 0;
-                        shipMusicSource.playOnAwake = false;
-                        shipMusicSource.maxDistance = Plugin.maxMusicDistance.Value;
-                        shipMusicSource.minDistance = 1;
-                        shipMusicSource.rolloffMode = AudioRolloffMode.Linear;
-                        shipMusicSource.clip = musicClip;
-                        shipMusicSource.Play();
+                            shipMusicSource.dopplerLevel = 0;
+                            shipMusicSource.spatialBlend = 1;
+                            shipMusicSource.volume = Plugin.musicVolume.Value;
+                            shipMusicSource.loop = true;
+                            shipMusicSource.priority = 0;
+                            shipMusicSource.playOnAwake = false;
+                            shipMusicSource.maxDistance = Plugin.maxMusicDistance.Value;
+                            shipMusicSource.minDistance = 1;
+                            shipMusicSource.rolloffMode = AudioRolloffMode.Linear;
+                            shipMusicSource.clip = musicClip;
+                            shipMusicSource.Play();
+                            Plugin.mls.LogInfo("made audiosource alongside audioclip!");
                     }
                 }
             }
@@ -91,6 +92,9 @@ namespace ShipMusic
             {
                 Plugin.mls.LogError($"found exception: {e}");
             }
+
+            shipMusicSource.maxDistance = Plugin.maxMusicDistance.Value;
+            shipMusicSource.volume = Plugin.musicVolume.Value;
         }
     }
 }

@@ -20,14 +20,13 @@ namespace ShipMusic
         public static ConfigEntry<float> maxMusicDistance;
         public static ConfigEntry<bool> enableFilter;
         public static ManualLogSource mls { get; private set; }
-        private readonly Harmony har = new Harmony(GUID);
 
         private void Awake()
         {
             mls = Logger;
-            musicVolume = Config.Bind("General", "Volume", 2f, "be glad that i added this");
-            maxMusicDistance = Config.Bind("General", "MaxDistance", 25f, "max distance of the sound");
-            enableFilter = Config.Bind("General", "Enable Speaker Filter?", false, "Should the mod enable the radio filter?");
+            musicVolume = Config.Bind("General", "Volume", 1f, new ConfigDescription("Volume of the music", new AcceptableValueRange<float>(0,1)));
+            maxMusicDistance = Config.Bind("General", "MaxDistance", 25f, "The maximum distance from which the music can reach the player listener");
+            enableFilter = Config.Bind("General", "Sound Filter", false, "When true, adds a special filter that makes the music sound like it's actually coming from a old speaker (not recommended, the filter isn't great, it's just there in case you want the 144p music experience)");
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
