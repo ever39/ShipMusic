@@ -43,6 +43,9 @@
     <Reference Include="BepInEx">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Lethal Company\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
+    <Reference Include="BMX.LobbyCompatibility">
+      <HintPath>..\..\..\..\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\v50\BepInEx\plugins\BMX-LobbyCompatibility\LobbyCompatibility\BMX.LobbyCompatibility.dll</HintPath>
+    </Reference>
     <Reference Include="LC_SoundTool">
       <HintPath>..\..\..\..\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\v50\BepInEx\plugins\no00ob-LCSoundTool\LC_SoundTool.dll</HintPath>
     </Reference>

@@ -15,6 +15,7 @@ namespace ShipMusic
         public static GameObject musicObj;
         private static AudioClip musicClip;
         public static AudioSource shipMusicSource;
+        public static AudioMixerGroup gameMixerGroup;
 
         private void Update()
         {
@@ -23,6 +24,7 @@ namespace ShipMusic
                 if (hangarShip == null)
                 {
                     hangarShip = GameObject.Find("/Environment/HangarShip/");
+                    gameMixerGroup = hangarShip.GetComponent<AudioSource>().outputAudioMixerGroup;
                     if (musicClip == null)
                     {
                         try
@@ -83,6 +85,7 @@ namespace ShipMusic
                             shipMusicSource.minDistance = 1;
                             shipMusicSource.rolloffMode = AudioRolloffMode.Linear;
                             shipMusicSource.clip = musicClip;
+                            shipMusicSource.outputAudioMixerGroup = gameMixerGroup;
                             shipMusicSource.Play();
                             Plugin.mls.LogInfo("made audiosource alongside audioclip!");
                     }
