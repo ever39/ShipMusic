@@ -29,26 +29,26 @@ namespace ShipMusic
                     {
                         try
                         {
-                            Plugin.mls.LogWarning("oops! no file?");
+                            Plugin.mls.LogWarning("no file loaded, checking for files in the folder!");
                             musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.wav");
                         }
                         catch (Exception)
                         {
                             try
                             {
-                                Plugin.mls.LogWarning("oops! no wav, trying ogg!");
+                                Plugin.mls.LogWarning("no wav, trying ogg!");
                                 musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.ogg");
                             }
                             catch (Exception)
                             {
                                 try
                                 {
-                                    Plugin.mls.LogWarning("oops! no wav, no ogg, trying mp3!");
+                                    Plugin.mls.LogWarning("no wav, no ogg, trying mp3!");
                                     musicClip = SoundTool.GetAudioClip("Command293-ShipMusic", "music.mp3");
                                 }
                                 catch (Exception)
                                 {
-                                    Plugin.mls.LogError("Help. There's no files.");
+                                    Plugin.mls.LogError("Help. There's no files. ");
                                 }
                             }
                         }
@@ -66,13 +66,16 @@ namespace ShipMusic
 
                             if (Plugin.enableFilter.Value)
                             {
-                                Plugin.mls.LogInfo("filter config is true! adding filters...");
+                                Plugin.mls.LogInfo("filter config is enabled, adding filters...");
+
                                 musicObj.AddComponent<AudioHighPassFilter>();
                                 musicObj.AddComponent<AudioDistortionFilter>();
                                 musicObj.AddComponent<AudioLowPassFilter>();
                                 musicObj.GetComponent<AudioHighPassFilter>().cutoffFrequency = 4150;
                                 musicObj.GetComponent<AudioDistortionFilter>().distortionLevel = 0.92f;
                                 musicObj.GetComponent<AudioLowPassFilter>().cutoffFrequency = 3064;
+
+                                Plugin.mls.LogInfo("Added filters!");
                             }
 
                             shipMusicSource.dopplerLevel = 0;
@@ -87,13 +90,14 @@ namespace ShipMusic
                             shipMusicSource.clip = musicClip;
                             shipMusicSource.outputAudioMixerGroup = gameMixerGroup;
                             shipMusicSource.Play();
-                            Plugin.mls.LogInfo("made audiosource alongside audioclip!");
+
+                            Plugin.mls.LogInfo("made ship music gameobject!");
                     }
                 }
             }
             catch(Exception e)
             {
-                Plugin.mls.LogError($"found exception: {e}");
+                Plugin.mls.LogError($"found error while making gameobject:\n{e}");
             }
 
             shipMusicSource.maxDistance = Plugin.maxMusicDistance.Value;

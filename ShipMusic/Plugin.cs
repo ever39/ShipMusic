@@ -19,6 +19,7 @@ namespace ShipMusic
         public const string GUID = "command.ShipMusic";
         public const string NAME = "ShipMusic";
         public const string VERSION = "1.0.0";
+
         public static AudioClip selectedClip;
         public static ConfigEntry<float> musicVolume;
         public static ConfigEntry<float> maxMusicDistance;
@@ -28,12 +29,14 @@ namespace ShipMusic
         private void Awake()
         {
             mls = Logger;
-            musicVolume = Config.Bind("General", "Volume", 1f, new ConfigDescription("Volume of the music", new AcceptableValueRange<float>(0,1)));
+            musicVolume = Config.Bind("General", "SoundVolume", 1f, new ConfigDescription("Volume of the music", new AcceptableValueRange<float>(0,1)));
             maxMusicDistance = Config.Bind("General", "MaxDistance", 25f, "The maximum distance from which the music can reach the player listener");
-            enableFilter = Config.Bind("General", "Sound Filter", false, "When true, adds a special filter that makes the music sound like it's actually coming from a old speaker (not recommended, the filter isn't great, it's just there in case you want the 144p music experience)");
+            enableFilter = Config.Bind("General", "SoundFilter", false, "When true, adds a filter that makes the music sound like it's heard from an actual old radio.");
             SceneManager.sceneLoaded += OnSceneLoaded;
+
             SetModCompatibility();
-            mls.LogInfo("Loaded!");
+
+            mls.LogInfo("Plugin loaded, and the ship now has music constantly playing in it. how fun");
         }
 
 
@@ -41,29 +44,30 @@ namespace ShipMusic
         {
             if (!Chainloader.PluginInfos.ContainsKey("BMX.LobbyCompatibility"))
             {
-                mls.LogInfo("no lobby compatibility");
+                mls.LogInfo("BMX.LobbyCompatibility wasn't found, skipped checking everything else.");
                 return;
             }
 
             var method = AccessTools.Method("LobbyCompatibility.Features.PluginHelper:RegisterPlugin");
-            if(method is null)
+            if(method == null)
             {
-                mls.LogWarning("failed to get BMX.LobbyCompatibility RegisterPlugin method, as it is null");
+                mls.LogError("failed to get BMX.LobbyCompatibility RegisterPlugin method, as it is somehow null");
                 return;
             }
 
-            mls.LogInfo("registering mod to BMX.LobbyCompatibility");
+            mls.LogInfo("Registering mod to BMX.LobbyCompatibility..");
+
             try
             {
                 method.Invoke(null, new object[] { GUID, new Version(VERSION), 0, 0 });
             }
-            catch(Exception e)
+            catch
             {
-                mls.LogError($"got error while registering mod\n {e}");
+                mls.LogError("got an error while registering mod, so this mod probably isn't registered.");
                 return;
             }
 
-            mls.LogInfo("registered mod with LobbyCompatibility!");
+            mls.LogInfo("Registered mod with BMX.LobbyCompatibility");
         }
 
 
