@@ -75,7 +75,7 @@ namespace ShipMusic
                                 musicObj.GetComponent<AudioDistortionFilter>().distortionLevel = 0.92f;
                                 musicObj.GetComponent<AudioLowPassFilter>().cutoffFrequency = 3064;
 
-                                Plugin.mls.LogInfo("Added filters!");
+                                Plugin.mls.LogInfo("Added filters! unfortunately you can't remove them in-game yet, as that would need the mod to destroy this gameobject");
                             }
 
                             shipMusicSource.dopplerLevel = 0;
