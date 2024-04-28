@@ -8,12 +8,11 @@ A simple mod that adds some music (that you can set yourself!) to the ship to pl
 
 ## Mod Configs
 Currently there are only three config settings for the mod, those being:
-- Sound Volume (which controls the volume of the set music)
-- Max Distance (which controls the maximum distance at which you can still hear the set music)
-- Sound Filter (which adds a "radio" filter to the set music, for aesthetic purposes)
+- ```Sound Volume``` (which controls the volume of the set music)
+- ```Max Distance``` (which controls the maximum distance at which you can still hear the set music)
+- ```Sound Filter``` (which adds a "radio" filter to the set music, for aesthetic purposes)
 
-The SoundVolume and MaxDistance can be updated in-game, however you have to rejoin a lobby if you want to turn off (or on) the sound filter while you're in-game
+The sound volume and max distance can be updated in-game, however turning the sound filter on or off requires you to rejoin to apply
 
 ## Replacing the default music
-
-add stuff here
+The mod has a ```music.wav``` file, although .mp3 and .ogg files also work. Changing this music file requires deleting the old music file (or changing its location to somewhere else that isn't in the mod folder), then moving the new sound file to the mod folder. The mod first checks for ```.wav``` files, then for ```.ogg``` files and lastly for ```.mp3``` files, which is why deleting the old music file is advised. Make sure that the new file name is ```music```, as the mod only checks for that file name.
